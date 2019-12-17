@@ -748,6 +748,12 @@ return state;
  * D3 - 17 
  */
 
+
+//---------------------------------------------------------
+// iterative deepening depth first search to compare memory and runtime usage
+// vs a Bidirectional breadth first search
+
+//---------------------------------------------------------
 vector<vi> applicableMoves{
    { 0 }, // g0 group
 	  {0,1,2,3,4,5}, // moves to transition to g1 // phase 1
