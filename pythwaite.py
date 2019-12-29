@@ -195,10 +195,10 @@ def applyMove(move, inputstate):
                 target = affectedCubies[face][x]
                 destination = affectedCubies[face][(x+1)%4]
                 state[destination] = oldState[target]
-            if(face == 2 or face == 3):
-                state[destination+20] = (oldState[target+20]+1)%2
-            else:
-                state[destination+20] = oldState[target+20]
+                if(face == 2 or face == 3):
+                    state[destination+20] = (((oldState[target+20])+1)%2)
+                else:
+                    state[destination+20] = oldState[target+20]
 
             #--- Corners and orientations
             if(x >= 4):
@@ -245,13 +245,12 @@ def initialize():
     return state
 
 #--- scrambles a given cube state using random moves
-def scramble(numberOfMoves, state):
-    path = []
+def scramble(numberOfMoves, state, path):
     for x in range(0, numberOfMoves):
         randmove = random.randint(0,17)
-        applyMoveStatic(randmove, state)
+        state = applyMove(randmove, state)
         path.append(randmove)
-    return path
+    return state
 
 #--- converts a numerical moves string into alphabetical move string
 movesString = ["R", "L", "F", "B", "U", "D", "R2", "L2", "F2", 
@@ -326,12 +325,12 @@ def BDBFS(startState, goalState):
             #--- direction, we have found an intersection
             if( (newID in direction) and (direction[newID] != oldDir)):
 
-                print("intersection found")
+                #print("intersection found")
 
                 #--- if newDir is 1, we are coming from backward search.
                 #--- we rebuild path accordingly
                 if(direction[newID] == 1):
-                    print("newDir is 1")
+                    #print("newDir is 1")
                     while(newID != startID):
                         path.insert(0, lastMove[newID])
                         newID = predecessor[newID]
@@ -347,7 +346,7 @@ def BDBFS(startState, goalState):
 
                     return path
                 if(direction[newID] == 2):
-                    print("newDir is 2")
+                    #print("newDir is 2")
 
                     while(oldID != startID):
                         path.insert(0, lastMove[oldID])
@@ -361,7 +360,6 @@ def BDBFS(startState, goalState):
 
                     for x in range(0, len(path)):
                         startState = applyMove(path[x], startState)
-                        print(startState)
 
                     return path
 
@@ -376,54 +374,76 @@ def BDBFS(startState, goalState):
 
 
 #--- Main
-"""
 cube = initialize()
-cubetwo = initialize()
+goalcube = initialize()
 
-path = scramble(10, cube)
+path = []
+cube = scramble(10, cube, path)
 letterpath = convertpath(path)
 print("Scramble path: ")
 print(letterpath)
-
-print()
-print(path)
-
-path.reverse()
-
-print(path)
+#path.reverse()
+print("cube after scramble: ")
+"""
 print(cube)
 for x in range(0,len(path)):
-    applyMoveStatic(path[x],cube)
-    print("applying move: ", path[x])
-    print(cube)
-
+    cube = applyMove(inverse(path[x]),cube)
+"""
 print(cube)
 
 phase = 1
-#path = BDBFS(cube, cubetwo)
-#print(letterpath)
 
-#path = BDBFS(cube, cubetwo)
+phase1path = BDBFS(cube,goalcube)
+for x in range(0, len(phase1path)):
+    cube = applyMove(phase1path[x], cube)
+phase1path = convertpath(phase1path)
+print("Phase 1 path: ", phase1path)
+print(cube)
 
-#print(path)
+phase = 2
+phase2path = BDBFS(cube,goalcube)
+for x in range(0, len(phase2path)):
+    cube = applyMove(phase2path[x], cube)
+phase2path = convertpath(phase2path)
+print("Phase 2 path: ", phase2path)
+print(cube)
 
-#newpath = convertpath(path)
-#print(newpath)
+phase = 3
+phase3path = BDBFS(cube,goalcube)
+for x in range(0, len(phase3path)):
+    cube = applyMove(phase3path[x], cube)
+phase3path = convertpath(phase3path)
+print("Phase 3 path: ", phase3path)
+print(cube)
+
+phase = 4
+phase4path = BDBFS(cube,goalcube)
+for x in range(0, len(phase4path)):
+    cube = applyMove(phase4path[x], cube)
+phase4path = convertpath(phase4path)
+print("Phase 4 path: ", phase4path)
+print(cube)
+
 """
-
-"""if newID in direction:
-    print("key is inside")
-else:
-    print("key is not inside") """
-
-cube = initialize()
-cuberef = cube
-cube2 = initialize()
-
-cube = applyMove(3,cube)
-print(cube)
-cube = applyMove(15,cube)
-print(cube)
+ * R  -  0
+ * L  -  1
+ * F  -  2
+ * B  -  3
+ * U  -  4
+ * D  -  5
+ * R2 -  6
+ * L2 -  7
+ * F2 -  8
+ * B2 -  9
+ * U2 - 10
+ * D2 - 11
+ * R3 - 12
+ * L3 - 13
+ * F3 - 14
+ * B3 - 15
+ * U3 - 16
+ * D3 - 17 
+ """
 
 
 
