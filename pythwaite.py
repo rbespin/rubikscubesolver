@@ -154,7 +154,7 @@ def id(state):
 
         #--- Ensuring even parity
         tetrad = 0
-        for x in range(20,32):
+        for x in range(12,20):
             for y in range(x+1, 20):
                 if state[x] > state[y]:
                     tetrad+=1
@@ -293,8 +293,6 @@ def BDBFS(startState, goalState):
         print("already in phase")
         return path
 
-    counter = 0;
-
     #--- begin BDBFS
     while( len(q) != 0 ):
 
@@ -378,7 +376,7 @@ cube = initialize()
 goalcube = initialize()
 
 path = []
-cube = scramble(10, cube, path)
+cube = scramble(30, cube, path)
 letterpath = convertpath(path)
 print("Scramble path: ")
 print(letterpath)
